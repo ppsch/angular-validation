@@ -138,11 +138,11 @@
 
                         /**
                          * validator
-                         * @type {*|Array}
+                         * @type {*}
                          *
                          * Convert user input String to Array
                          */
-                        var validator = attrs.validator.split(',');
+                        var validator = attrs.validator;
 
                         /**
                          * guid use
@@ -190,10 +190,10 @@
                         });
 
                         /**
-                         * Check Every validator
+                         * Check validator
                          */
-                        validator.forEach(function(validation) {
 
+                        (function(validation) {
                             /**
                              * Click submit form, check the validity when submit
                              */
@@ -275,7 +275,7 @@
                                 checkValidation(scope, element, attrs, ctrl, validation, value);
                             });
 
-                        });
+                        })(validator);
 
                         $timeout(function() {
                             /**
