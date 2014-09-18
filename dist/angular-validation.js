@@ -279,13 +279,14 @@
 }).call(this);
 
 (function() {
-    angular.module('validation.directive', ['validation.provider'])
+    angular.module('validation.directive', ['validation.provider', 'pascalprecht.translate'])
         .directive('validator', ['$injector',
             function($injector) {
 
                 var $validationProvider = $injector.get('$validation'),
                     $q = $injector.get('$q'),
                     $timeout = $injector.get('$timeout');
+                    $translate = $injector.get('$translate');
 
                 /**
                  * Do this function if validation valid
@@ -298,7 +299,11 @@
                  */
                 var validFunc = function(element, validMessage, validation, callback, ctrl) {
                     if ($validationProvider.showSuccessMessage) {
-                        element.next().html($validationProvider.getSuccessHTML(validMessage || $validationProvider.getDefaultMsg(validation).success));
+                        msg = validMessage || $validationProvider.getDefaultMsg(validation).success;
+                        $translate(msg).then(function(translatedMessage) {
+                          element.next().html($validationProvider.getSuccessHTML(translatedMessage));
+                        });
+
                     } else {
                         element.next().html('');
                     }
@@ -320,7 +325,10 @@
                  */
                 var invalidFunc = function(element, validMessage, validation, callback, ctrl) {
                     if ($validationProvider.showErrorMessage) {
-                        element.next().html($validationProvider.getErrorHTML(validMessage || $validationProvider.getDefaultMsg(validation).error));
+                      msg = validMessage || $validationProvider.getDefaultMsg(validation).error;
+                      $translate(msg).then(function(translatedMessage) {
+                        element.next().html($validationProvider.getErrorHTML(translatedMessage));
+                      });
                     } else {
                         element.next().html('');
                     }
