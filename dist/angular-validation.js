@@ -192,7 +192,7 @@
                     }
                 } else {
                     for (var i in form) { // whole scope
-                        if (form[i] && form[i].hasOwnProperty('$dirty')) {
+                        if (i[0] !== '$' && form[i].hasOwnProperty('$dirty')) {
                             $scope.$broadcast(i + 'submit-' + form[i].validationId, idx++);
                         }
                     }
@@ -229,7 +229,6 @@
              * @param form
              */
             this.reset = function(form) {
-
                 if (form === undefined) {
                     console.error('This is not a regular Form name scope');
                     return;
@@ -243,7 +242,7 @@
                     }
                 } else {
                     for (var i in form) {
-                        if (form[i].hasOwnProperty('$dirty')) {
+                        if (i[0] !== '$' && form[i].hasOwnProperty('$dirty')) {
                             $scope.$broadcast(i + 'reset-' + form[i].validationId);
                         }
                     }
@@ -366,8 +365,8 @@
                         validator = paramIndex === -1 ? validatorExpr : validatorExpr.substr(0, paramIndex),
                         validatorParam = paramIndex === -1 ? null : validatorExpr.substr(paramIndex + 1),
                         leftValidation = validators.slice(1),
-                        successMessage = validation + 'SuccessMessage',
-                        errorMessage = validation + 'ErrorMessage',
+                        successMessage = validator + 'SuccessMessage',
+                        errorMessage = validator + 'ErrorMessage',
                         expression = $validationProvider.getExpression(validator),
                         valid = {
                             success: function() {
@@ -507,7 +506,7 @@
                              * Click submit form, check the validity when submit
                              */
                             scope.$on(ctrl.$name + 'submit-' + uid, function(event, index) {
-                                var value = element[0].value,
+                                var value = ctrl.$viewValue,
                                     isValid = false;
 
                                 if (index === 0) {
@@ -549,7 +548,7 @@
                              */
                             if (attrs.validMethod === 'blur') {
                                 element.bind('blur', function() {
-                                    var value = element[0].value;
+                                    var value = ctrl.$viewValue;
                                     scope.$apply(function() {
                                         checkValidation(scope, element, attrs, ctrl, validation, value);
                                     });

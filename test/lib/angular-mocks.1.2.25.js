@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.3.0-beta.5
+ * @license AngularJS v1.2.25
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -62,6 +62,8 @@
 
             return listener;
         };
+
+        self.$$checkUrlChange = angular.noop;
 
         self.cookieHash = {};
         self.lastCookieHash = {};
@@ -462,8 +464,8 @@
                         iteration = 0,
                         skipApply = (angular.isDefined(invokeApply) && !invokeApply);
 
-                    count = (angular.isDefined(count)) ? count : 0,
-                        promise.then(null, null, fn);
+                    count = (angular.isDefined(count)) ? count : 0;
+                    promise.then(null, null, fn);
 
                     promise.$$intervalId = nextRepeatId;
 
@@ -900,7 +902,7 @@
      * When an Angular application needs some data from a server, it calls the $http service, which
      * sends the request to a real server using $httpBackend service. With dependency injection, it is
      * easy to inject $httpBackend mock (which has the same API as $httpBackend) and use it to verify
-     * the requests and respond with some testing data without sending a request to real server.
+     * the requests and respond with some testing data without sending a request to a real server.
      *
      * There are two ways to specify what test data should be returned as http responses by the mock
      * backend when the code under test makes http requests:
@@ -1186,8 +1188,7 @@
          * Creates a new backend definition.
          *
          * @param {string} method HTTP method.
-         * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-         *   and returns true if the url match the current definition.
+         * @param {string|RegExp} url HTTP url.
          * @param {(string|RegExp|function(string))=} data HTTP request body or function that receives
          *   data string and returns true if the data is as expected.
          * @param {(Object|function(Object))=} headers HTTP headers or function that receives http header
@@ -1226,8 +1227,7 @@
          * @description
          * Creates a new backend definition for GET requests. For more info see `when()`.
          *
-         * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-         *   and returns true if the url match the current definition.
+         * @param {string|RegExp} url HTTP url.
          * @param {(Object|function(Object))=} headers HTTP headers.
          * @returns {requestHandler} Returns an object with `respond` method that control how a matched
          * request is handled.
@@ -1239,8 +1239,7 @@
          * @description
          * Creates a new backend definition for HEAD requests. For more info see `when()`.
          *
-         * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-         *   and returns true if the url match the current definition.
+         * @param {string|RegExp} url HTTP url.
          * @param {(Object|function(Object))=} headers HTTP headers.
          * @returns {requestHandler} Returns an object with `respond` method that control how a matched
          * request is handled.
@@ -1252,8 +1251,7 @@
          * @description
          * Creates a new backend definition for DELETE requests. For more info see `when()`.
          *
-         * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-         *   and returns true if the url match the current definition.
+         * @param {string|RegExp} url HTTP url.
          * @param {(Object|function(Object))=} headers HTTP headers.
          * @returns {requestHandler} Returns an object with `respond` method that control how a matched
          * request is handled.
@@ -1265,8 +1263,7 @@
          * @description
          * Creates a new backend definition for POST requests. For more info see `when()`.
          *
-         * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-         *   and returns true if the url match the current definition.
+         * @param {string|RegExp} url HTTP url.
          * @param {(string|RegExp|function(string))=} data HTTP request body or function that receives
          *   data string and returns true if the data is as expected.
          * @param {(Object|function(Object))=} headers HTTP headers.
@@ -1280,8 +1277,7 @@
          * @description
          * Creates a new backend definition for PUT requests.  For more info see `when()`.
          *
-         * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-         *   and returns true if the url match the current definition.
+         * @param {string|RegExp} url HTTP url.
          * @param {(string|RegExp|function(string))=} data HTTP request body or function that receives
          *   data string and returns true if the data is as expected.
          * @param {(Object|function(Object))=} headers HTTP headers.
@@ -1295,8 +1291,7 @@
          * @description
          * Creates a new backend definition for JSONP requests. For more info see `when()`.
          *
-         * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-         *   and returns true if the url match the current definition.
+         * @param {string|RegExp} url HTTP url.
          * @returns {requestHandler} Returns an object with `respond` method that control how a matched
          * request is handled.
          */
@@ -1310,8 +1305,7 @@
          * Creates a new request expectation.
          *
          * @param {string} method HTTP method.
-         * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-         *   and returns true if the url match the current definition.
+         * @param {string|RegExp} url HTTP url.
          * @param {(string|RegExp|function(string)|Object)=} data HTTP request body or function that
          *  receives data string and returns true if the data is as expected, or Object if request body
          *  is in JSON format.
@@ -1344,8 +1338,7 @@
          * @description
          * Creates a new request expectation for GET requests. For more info see `expect()`.
          *
-         * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-         *   and returns true if the url match the current definition.
+         * @param {string|RegExp} url HTTP url.
          * @param {Object=} headers HTTP headers.
          * @returns {requestHandler} Returns an object with `respond` method that control how a matched
          * request is handled. See #expect for more info.
@@ -1357,8 +1350,7 @@
          * @description
          * Creates a new request expectation for HEAD requests. For more info see `expect()`.
          *
-         * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-         *   and returns true if the url match the current definition.
+         * @param {string|RegExp} url HTTP url.
          * @param {Object=} headers HTTP headers.
          * @returns {requestHandler} Returns an object with `respond` method that control how a matched
          *   request is handled.
@@ -1370,8 +1362,7 @@
          * @description
          * Creates a new request expectation for DELETE requests. For more info see `expect()`.
          *
-         * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-         *   and returns true if the url match the current definition.
+         * @param {string|RegExp} url HTTP url.
          * @param {Object=} headers HTTP headers.
          * @returns {requestHandler} Returns an object with `respond` method that control how a matched
          *   request is handled.
@@ -1383,8 +1374,7 @@
          * @description
          * Creates a new request expectation for POST requests. For more info see `expect()`.
          *
-         * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-         *   and returns true if the url match the current definition.
+         * @param {string|RegExp} url HTTP url.
          * @param {(string|RegExp|function(string)|Object)=} data HTTP request body or function that
          *  receives data string and returns true if the data is as expected, or Object if request body
          *  is in JSON format.
@@ -1399,8 +1389,7 @@
          * @description
          * Creates a new request expectation for PUT requests. For more info see `expect()`.
          *
-         * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-         *   and returns true if the url match the current definition.
+         * @param {string|RegExp} url HTTP url.
          * @param {(string|RegExp|function(string)|Object)=} data HTTP request body or function that
          *  receives data string and returns true if the data is as expected, or Object if request body
          *  is in JSON format.
@@ -1415,8 +1404,7 @@
          * @description
          * Creates a new request expectation for PATCH requests. For more info see `expect()`.
          *
-         * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-         *   and returns true if the url match the current definition.
+         * @param {string|RegExp} url HTTP url.
          * @param {(string|RegExp|function(string)|Object)=} data HTTP request body or function that
          *  receives data string and returns true if the data is as expected, or Object if request body
          *  is in JSON format.
@@ -1431,8 +1419,7 @@
          * @description
          * Creates a new request expectation for JSONP requests. For more info see `expect()`.
          *
-         * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-         *   and returns true if the url match the current definition.
+         * @param {string|RegExp} url HTTP url.
          * @returns {requestHandler} Returns an object with `respond` method that control how a matched
          *   request is handled.
          */
@@ -1556,7 +1543,6 @@
         this.matchUrl = function(u) {
             if (!url) return true;
             if (angular.isFunction(url.test)) return url.test(u);
-            if (angular.isFunction(url)) return url(u);
             return url == u;
         };
 
@@ -1738,11 +1724,12 @@
     /**
      * @ngdoc module
      * @name ngMock
+     * @packageName angular-mocks
      * @description
      *
      * # ngMock
      *
-     * The `ngMock` module providers support to inject and mock Angular services into unit tests.
+     * The `ngMock` module provides support to inject and mock Angular services into unit tests.
      * In addition, ngMock also extends various core ng services such that they can be
      * inspected and controlled in a synchronous manner within test code.
      *
@@ -1767,6 +1754,7 @@
      * @ngdoc module
      * @name ngMockE2E
      * @module ngMockE2E
+     * @packageName angular-mocks
      * @description
      *
      * The `ngMockE2E` is an angular module which contains mocks suitable for end-to-end testing.
@@ -1800,7 +1788,7 @@
      * use the `passThrough` request handler of `when` instead of `respond`.
      *
      * Additionally, we don't want to manually have to flush mocked out requests like we do during unit
-     * testing. For this reason the e2e $httpBackend automatically flushes mocked out requests
+     * testing. For this reason the e2e $httpBackend flushes mocked out requests
      * automatically, closely simulating the behavior of the XMLHttpRequest object.
      *
      * To setup the application to run with this http backend, you have to create a module that depends
@@ -1816,7 +1804,9 @@
  *
  *     // adds a new phone to the phones array
  *     $httpBackend.whenPOST('/phones').respond(function(method, url, data) {
- *       phones.push(angular.fromJson(data));
+ *       var phone = angular.fromJson(data);
+ *       phones.push(phone);
+ *       return [200, phone, {}];
  *     });
  *     $httpBackend.whenGET(/^\/templates\//).passThrough();
  *     //...
@@ -1834,8 +1824,7 @@
      * Creates a new backend definition.
      *
      * @param {string} method HTTP method.
-     * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-     *   and returns true if the url match the current definition.
+     * @param {string|RegExp} url HTTP url.
      * @param {(string|RegExp)=} data HTTP request body.
      * @param {(Object|function(Object))=} headers HTTP headers or function that receives http header
      *   object and returns true if the headers match the current definition.
@@ -1860,8 +1849,7 @@
      * @description
      * Creates a new backend definition for GET requests. For more info see `when()`.
      *
-     * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-     *   and returns true if the url match the current definition.
+     * @param {string|RegExp} url HTTP url.
      * @param {(Object|function(Object))=} headers HTTP headers.
      * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
      *   control how a matched request is handled.
@@ -1874,8 +1862,7 @@
      * @description
      * Creates a new backend definition for HEAD requests. For more info see `when()`.
      *
-     * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-     *   and returns true if the url match the current definition.
+     * @param {string|RegExp} url HTTP url.
      * @param {(Object|function(Object))=} headers HTTP headers.
      * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
      *   control how a matched request is handled.
@@ -1888,8 +1875,7 @@
      * @description
      * Creates a new backend definition for DELETE requests. For more info see `when()`.
      *
-     * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-     *   and returns true if the url match the current definition.
+     * @param {string|RegExp} url HTTP url.
      * @param {(Object|function(Object))=} headers HTTP headers.
      * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
      *   control how a matched request is handled.
@@ -1902,8 +1888,7 @@
      * @description
      * Creates a new backend definition for POST requests. For more info see `when()`.
      *
-     * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-     *   and returns true if the url match the current definition.
+     * @param {string|RegExp} url HTTP url.
      * @param {(string|RegExp)=} data HTTP request body.
      * @param {(Object|function(Object))=} headers HTTP headers.
      * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
@@ -1917,8 +1902,7 @@
      * @description
      * Creates a new backend definition for PUT requests.  For more info see `when()`.
      *
-     * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-     *   and returns true if the url match the current definition.
+     * @param {string|RegExp} url HTTP url.
      * @param {(string|RegExp)=} data HTTP request body.
      * @param {(Object|function(Object))=} headers HTTP headers.
      * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
@@ -1932,8 +1916,7 @@
      * @description
      * Creates a new backend definition for PATCH requests.  For more info see `when()`.
      *
-     * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-     *   and returns true if the url match the current definition.
+     * @param {string|RegExp} url HTTP url.
      * @param {(string|RegExp)=} data HTTP request body.
      * @param {(Object|function(Object))=} headers HTTP headers.
      * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
@@ -1947,8 +1930,7 @@
      * @description
      * Creates a new backend definition for JSONP requests. For more info see `when()`.
      *
-     * @param {string|RegExp|function(string)} url HTTP url or function that receives the url
-     *   and returns true if the url match the current definition.
+     * @param {string|RegExp} url HTTP url.
      * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
      *   control how a matched request is handled.
      */
@@ -1980,12 +1962,18 @@
             };
 
 
-        beforeEach(function() {
+        (window.beforeEach || window.setup)(function() {
             currentSpec = this;
         });
 
-        afterEach(function() {
+        (window.afterEach || window.teardown)(function() {
             var injector = currentSpec.$injector;
+
+            angular.forEach(currentSpec.$modules, function(module) {
+                if (module && module.$$hashKey) {
+                    module.$$hashKey = undefined;
+                }
+            });
 
             currentSpec.$injector = null;
             currentSpec.$modules = null;
@@ -2017,6 +2005,7 @@
          * @description
          *
          * *NOTE*: This function is also published on window for easy access.<br>
+         * *NOTE*: This function is declared ONLY WHEN running tests with jasmine or mocha
          *
          * This function registers a module configuration code. It collects the configuration information
          * which will be used when the injector is created by {@link angular.mock.inject inject}.
@@ -2026,7 +2015,7 @@
          * @param {...(string|Function|Object)} fns any number of modules which are represented as string
          *        aliases or as anonymous module initialization functions. The modules are used to
          *        configure the injector. The 'ng' and 'ngMock' modules are automatically loaded. If an
-         *        object literal is passed they will be register as values in the module, the key being
+         *        object literal is passed they will be registered as values in the module, the key being
          *        the module name and the value being what is returned.
          */
         window.module = angular.mock.module = function() {
@@ -2059,6 +2048,7 @@
          * @description
          *
          * *NOTE*: This function is also published on window for easy access.<br>
+         * *NOTE*: This function is declared ONLY WHEN running tests with jasmine or mocha
          *
          * The inject function wraps a function into an injectable function. The inject() creates new
          * instance of {@link auto.$injector $injector} per test, which is then used for
